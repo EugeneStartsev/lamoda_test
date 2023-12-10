@@ -1,0 +1,583 @@
+{
+	"info": {
+		"_postman_id": "0d850a71-4dc8-4c75-beb0-fb48a5942f79",
+		"name": "Lamoda tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26392832"
+	},
+	"item": [
+		{
+			"name": "Get Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Test all count\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.all_count, '\"all_count\" must be 57').to.eql(57);",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[0].name, '\"name\" must be \"milk\"').to.eql('milk');",
+							"    pm.expect(jsonData.goods[0].size, '\"size\" must be \"0.2m\"').to.eql('0.2m');",
+							"    pm.expect(jsonData.goods[0].product_id, '\"product_id\" must be 1').to.eql(1);",
+							"    pm.expect(jsonData.goods[0].count, '\"count\" must be 15').to.eql(15);",
+							"});",
+							"",
+							"pm.test(\"Test second of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[1].name, '\"name\" must be \"tables\"').to.eql('tables');",
+							"    pm.expect(jsonData.goods[1].size, '\"size\" must be \"1.5m\"').to.eql('1.5m');",
+							"    pm.expect(jsonData.goods[1].product_id, '\"product_id\" must be 2').to.eql(2);",
+							"    pm.expect(jsonData.goods[1].count, '\"count\" must be 20').to.eql(20);",
+							"});",
+							"",
+							"pm.test(\"Test third of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[2].name, '\"name\" must be \"doors\"').to.eql('doors');",
+							"    pm.expect(jsonData.goods[2].size, '\"size\" must be \"1.8m\"').to.eql('1.8m');",
+							"    pm.expect(jsonData.goods[2].product_id, '\"product_id\" must be 3').to.eql(3);",
+							"    pm.expect(jsonData.goods[2].count, '\"count\" must be 18').to.eql(18);",
+							"});",
+							"",
+							"pm.test(\"Test fourth of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[3].name, '\"name\" must be \"microphones\"').to.eql('microphones');",
+							"    pm.expect(jsonData.goods[3].size, '\"size\" must be \"0.15m\"').to.eql('0.15m');",
+							"    pm.expect(jsonData.goods[3].product_id, '\"product_id\" must be 4').to.eql(4);",
+							"    pm.expect(jsonData.goods[3].count, '\"count\" must be 4').to.eql(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reserve some products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].name, '\"name\" must be \"milk\"').to.eql('milk');",
+							"    pm.expect(jsonData[0].size, '\"size\" must be \"0.2m\"').to.eql('0.2m');",
+							"    pm.expect(jsonData[0].product_id, '\"product_id\" must be 1').to.eql(1);",
+							"    pm.expect(jsonData[0].count, '\"count\" must be 15').to.eql(15);",
+							"});",
+							"",
+							"pm.test(\"Test second of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].name, '\"name\" must be \"tables\"').to.eql('tables');",
+							"    pm.expect(jsonData[1].size, '\"size\" must be \"1.5m\"').to.eql('1.5m');",
+							"    pm.expect(jsonData[1].product_id, '\"product_id\" must be 2').to.eql(2);",
+							"    pm.expect(jsonData[1].count, '\"count\" must be 20').to.eql(20);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[1,2]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product after reserve",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Test all count\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.all_count, '\"all_count\" must be 22').to.eql(22);",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[0].name, '\"name\" must be \"doors\"').to.eql('doors');",
+							"    pm.expect(jsonData.goods[0].size, '\"size\" must be \"1.8m\"').to.eql('1.8m');",
+							"    pm.expect(jsonData.goods[0].product_id, '\"product_id\" must be 3').to.eql(3);",
+							"    pm.expect(jsonData.goods[0].count, '\"count\" must be 18').to.eql(18);",
+							"});",
+							"",
+							"pm.test(\"Test second of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[1].name, '\"name\" must be \"microphones\"').to.eql('microphones');",
+							"    pm.expect(jsonData.goods[1].size, '\"size\" must be \"0.15m\"').to.eql('0.15m');",
+							"    pm.expect(jsonData.goods[1].product_id, '\"product_id\" must be 4').to.eql(4);",
+							"    pm.expect(jsonData.goods[1].count, '\"count\" must be 4').to.eql(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reserve empty array",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.be.badRequest;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData, 'string must be \"Массив не должен быть пустым\"').to.eql('Массив не должен быть пустым')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reserve wrong array",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.be.badRequest;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData, 'string must be \"Такой массив не может быть обработан\"').to.eql('Такой массив не может быть обработан')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "sdfhjksdh",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reserve wrong product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.be.badRequest;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData, 'string must be \"Таких товаров нет на складе\"').to.eql('Таких товаров нет на складе')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[123123123, 123123123123]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete product from reserve",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].name, '\"name\" must be \"milk\"').to.eql('milk');",
+							"    pm.expect(jsonData[0].size, '\"size\" must be \"0.2m\"').to.eql('0.2m');",
+							"    pm.expect(jsonData[0].product_id, '\"product_id\" must be 1').to.eql(1);",
+							"    pm.expect(jsonData[0].count, '\"count\" must be 15').to.eql(15);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[1]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get products aftrer delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Test all count\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.all_count, '\"all_count\" must be 37').to.eql(37);",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[0].name, '\"name\" must be \"milk\"').to.eql('milk');",
+							"    pm.expect(jsonData.goods[0].size, '\"size\" must be \"0.2m\"').to.eql('0.2m');",
+							"    pm.expect(jsonData.goods[0].product_id, '\"product_id\" must be 1').to.eql(1);",
+							"    pm.expect(jsonData.goods[0].count, '\"count\" must be 15').to.eql(15);",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[1].name, '\"name\" must be \"doors\"').to.eql('doors');",
+							"    pm.expect(jsonData.goods[1].size, '\"size\" must be \"1.8m\"').to.eql('1.8m');",
+							"    pm.expect(jsonData.goods[1].product_id, '\"product_id\" must be 3').to.eql(3);",
+							"    pm.expect(jsonData.goods[1].count, '\"count\" must be 18').to.eql(18);",
+							"});",
+							"",
+							"pm.test(\"Test second of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.goods[2].name, '\"name\" must be \"microphones\"').to.eql('microphones');",
+							"    pm.expect(jsonData.goods[2].size, '\"size\" must be \"0.15m\"').to.eql('0.15m');",
+							"    pm.expect(jsonData.goods[2].product_id, '\"product_id\" must be 4').to.eql(4);",
+							"    pm.expect(jsonData.goods[2].count, '\"count\" must be 4').to.eql(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete empty array",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.be.badRequest;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData, 'string must be \"Массив не должен быть пустым\"').to.eql('Массив не должен быть пустым')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete wrong array",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.be.badRequest;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData, 'string must be \"Такой массив не может быть обработан\"').to.eql('Такой массив не может быть обработан')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "asdasgdfashj",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete wrong product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.be.badRequest;",
+							"});",
+							"",
+							"pm.test(\"Test first of goods\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData, 'string must be \"Запрашиваемые товары уже удалены из резерва или не были туда добавлены\"').to.eql('Запрашиваемые товары уже удалены из резерва или не были туда добавлены')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[123123,123123123123]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:4000",
+			"type": "string"
+		}
+	]
+}

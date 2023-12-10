@@ -183,7 +183,7 @@ func bindJson(c *gin.Context) ([]int, bool) {
 	}
 
 	if len(query) == 0 {
-		c.JSON(http.StatusBadRequest, "Массив не может быть пустым")
+		c.JSON(http.StatusBadRequest, "Массив не должен быть пустым")
 		return nil, true
 	} else {
 		return query, false
