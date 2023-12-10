@@ -81,7 +81,7 @@ make -f Makefile
 ```bash
 go test ./
 ```
-Требования к тестам см. в [postman-test.md](/backend/doc/postman-test) и [unit-test.md](/backend/doc/unit-test.md)
+Требования к тестам см. в [postman-test.md](/backend/doc/postman-test.md) и [unit-test.md](/backend/doc/unit-test.md)
 
 
 
