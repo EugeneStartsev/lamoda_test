@@ -8,11 +8,11 @@ RUN go mod download
 
 COPY backend .
 
-RUN go install ./
+RUN go install ./worker-lamoda
 
 
 FROM alpine:3.16 AS worker-test
 
-COPY --from=builder /go/bin/lamoda_test /usr/local/bin/
+COPY --from=builder /go/bin/worker-lamoda /usr/local/bin/
 
-ENTRYPOINT ["lamoda_test"]
+ENTRYPOINT ["worker-lamoda"]
