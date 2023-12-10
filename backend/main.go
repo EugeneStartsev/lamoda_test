@@ -5,10 +5,13 @@ import (
 	"flag"
 	"fmt"
 	"github.com/doug-martin/goqu/v9"
+	"github.com/gin-gonic/gin"
 	"log"
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
+
 	dbConn := flag.String("db",
 		"host=localhost dbname=lamoda user=postgres password=lamoda sslmode=disable",
 		"database connection string")

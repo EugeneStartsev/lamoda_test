@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  worker-test:
+    image: alpine3.16_worker-test
+    ports:
+      - "4000:4000"
+    command:
+      - -db
+      - host=db dbname=lamoda user=postgres password=lamoda sslmode=disable
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:15.4-alpine
+    environment:
+      POSTGRES_DB: "lamoda"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "lamoda"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./pgdata:/var/lib/postgresql/data"
+    restart: always
