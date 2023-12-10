@@ -5,9 +5,9 @@
 
 ## :checkered_flag: Установка и запуск
 
-### :package: Используя Docker (рекомендуется)
+### :package: Используя Docker
 
-Для запуска **BankApp** требуются следующие шаги:
+Для запуска **Warehouse Service** требуются следующие шаги:
 
 1. Установить [Docker](https://www.docker.com/) на локальную машину.
 2. Склонировать репозиторий проекта.
@@ -71,6 +71,17 @@ make -f Makefile
     }
 ]
 ```
+
+## Тесты
+`Для использования тестов через postman`
+1. Необходимо скачать коллекцию postman-тестов
+2. Запустить тесты из коллекции:
+
+`Для использования unit-тестов`
+```bash
+go test ./
+```
+Требования к тестам см. в [postman-test.md](/backend/doc/postman-test) и [unit-test.md](/backend/doc/unit-test.md)
 
 
 
