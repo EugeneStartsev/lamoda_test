@@ -934,7 +934,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Delete product",
 					"event": [
 						{
 							"listen": "test",
