@@ -28,6 +28,8 @@ func newHttpServer(db *goqu.Database) *httpServer {
 	s.router.GET("/product", s.handleGetProducts)
 	s.router.POST("/product", s.handlePostProducts)
 	s.router.DELETE("/product", s.handleDeleteProducts)
+	s.router.POST("/product/warehouse", s.handlePostProductsToWarehouse)
+	s.router.DELETE("/product/warehouse", s.handleDeleteProductsFromWarehouse)
 
 	return &s
 }
@@ -76,9 +78,78 @@ func (s *httpServer) handleGetProducts(c *gin.Context) {
 
 func (s *httpServer) handlePostProducts(c *gin.Context) {
 	var product Product
+
+	err := c.ShouldBindJSON(&product)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Такой продукт не может быть добавлен")
+		return
+	}
+
+	_, err = s.db.Insert("products").Rows(goqu.Record{
+		"product_name": product.Name,
+		"size":         product.Size,
+		"count":        product.Count,
+	}).Executor().Exec()
+
+	if err != nil {
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
+}
+
+func (s *httpServer) handleDeleteProducts(c *gin.Context) {
+	var product Product
 	var goods []Product
 
-	query, isExit := bindJson(c)
+	arrayOfID, isExit := bindJsonToArray(c)
+
+	if isExit {
+		return
+	}
+
+	for id := range arrayOfID {
+		isFound, err := s.db.From("products").Where(goqu.Ex{"unique_code": arrayOfID[id]}).ScanStruct(&product)
+
+		if err != nil {
+			_ = c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+
+		if isFound {
+			_, err := s.db.Delete("products").Where(goqu.Ex{"unique_code": arrayOfID[id]}).Executor().Exec()
+
+			if err != nil {
+				_ = c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+
+			_, err = s.db.Delete("warehouse").Where(goqu.Ex{"product_name": product.Name}).Executor().Exec()
+
+			if err != nil {
+				_ = c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+
+			goods = append(goods, product)
+		}
+	}
+
+	if len(goods) == 0 {
+		c.JSON(http.StatusBadRequest, "Продуктов с такими ID нет в базе")
+		return
+	}
+
+	c.JSON(http.StatusOK, goods)
+}
+
+func (s *httpServer) handlePostProductsToWarehouse(c *gin.Context) {
+	var product Product
+	var goods []Product
+
+	arrayOfID, isExit := bindJsonToArray(c)
 
 	var countOfAdd int
 
@@ -86,8 +157,8 @@ func (s *httpServer) handlePostProducts(c *gin.Context) {
 		return
 	}
 
-	for id := range query {
-		canFindID, err := s.db.From("products").Where(goqu.Ex{"unique_code": query[id]}).ScanStruct(&product)
+	for id := range arrayOfID {
+		canFindID, err := s.db.From("products").Where(goqu.Ex{"unique_code": arrayOfID[id]}).ScanStruct(&product)
 
 		if err != nil {
 			_ = c.AbortWithError(http.StatusInternalServerError, err)
@@ -132,21 +203,21 @@ func (s *httpServer) handlePostProducts(c *gin.Context) {
 	}
 }
 
-func (s *httpServer) handleDeleteProducts(c *gin.Context) {
+func (s *httpServer) handleDeleteProductsFromWarehouse(c *gin.Context) {
 	var product Product
 	var goods []Product
 
-	query, isExit := bindJson(c)
+	arrayOfID, isExit := bindJsonToArray(c)
 
 	if isExit {
 		return
 	}
 
-	for id := range query {
+	for id := range arrayOfID {
 		canFindID, err := s.db.Select("p.product_name", "p.size", "p.unique_code", "p.count").
 			From(goqu.T("products").As("p")).
 			Join(goqu.T("warehouse").As("w"), goqu.On(goqu.Ex{"p.product_name": goqu.I("w.product_name")})).
-			Where(goqu.Ex{"unique_code": query[id]}).
+			Where(goqu.Ex{"unique_code": arrayOfID[id]}).
 			ScanStruct(&product)
 
 		if err != nil {
@@ -174,18 +245,18 @@ func (s *httpServer) handleDeleteProducts(c *gin.Context) {
 
 }
 
-func bindJson(c *gin.Context) ([]int, bool) {
-	var query []int
+func bindJsonToArray(c *gin.Context) ([]int, bool) {
+	var arrayOfID []int
 
-	if err := c.ShouldBindJSON(&query); err != nil {
+	if err := c.ShouldBindJSON(&arrayOfID); err != nil {
 		c.JSON(http.StatusBadRequest, "Такой массив не может быть обработан")
 		return nil, true
 	}
 
-	if len(query) == 0 {
+	if len(arrayOfID) == 0 {
 		c.JSON(http.StatusBadRequest, "Массив не должен быть пустым")
 		return nil, true
 	} else {
-		return query, false
+		return arrayOfID, false
 	}
 }
