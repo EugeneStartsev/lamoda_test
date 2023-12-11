@@ -72,6 +72,24 @@ make -f Makefile
 ]
 ```
 
+## Стартовые данные базы данных:
+
+`Таблица products`
+
+|  unique_code  |  product_name  |  size   |  count  |
+|:-------------:|:--------------:|:-------:|:-------:|
+|       1       |      milk      |  0.2m   |   15    |
+|       2       |     tables     |  1.5m   |   20    |
+|       3       |     doors      |  1.8m   |   18    |
+|       4       |  microphones   |  0.15m  |    4    |
+
+`Таблица warehouse`
+
+| product_name | can_be_use |
+| :----------: | :--------- |
+ |             |            |
+
+
 ## Тесты
 `Для использования тестов через postman`
 1. Необходимо скачать коллекцию [postman-тестов](/postman_collection)

@@ -8,8 +8,6 @@ services:
     command:
       - -db
       - host=db dbname=lamoda user=postgres password=lamoda sslmode=disable
-    depends_on:
-      - db
     restart: always
 
   db:
@@ -21,5 +19,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - ./backend/data:/docker-entrypoint-initdb.d
       - "./pgdata:/var/lib/postgresql/data"
     restart: always

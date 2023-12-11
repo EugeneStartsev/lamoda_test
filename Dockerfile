@@ -2,11 +2,11 @@ FROM golang:1.21-alpine as builder
 
 WORKDIR /src/go
 
-COPY backend/go.mod backend/go.sum ./
+COPY ./backend/go.mod ./backend/go.sum ./
 
 RUN go mod download
 
-COPY backend .
+COPY ./backend .
 
 RUN go install ./worker-lamoda
 
